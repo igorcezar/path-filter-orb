@@ -1,13 +1,16 @@
 description: >
-  Sample example description.
-# Provide a use-case based example for using this orb.
-# Everything in the `usage` section will be displayed in the orb registry.
-# Comments are not retained.
+  Continue a pipeline after check file changes based on the 
+  last commit stored in the cache for mapped paths. 
+  If there is no cached commit, it will assume there were file changes.
 usage:
   version: 2.1
+  setup: true
   orbs:
-    <orb-name>: <namespace>/<orb-name>@1.2.3
+    path-filtering: igorcezar/path-filter@0.0.1
   workflows:
-    use-my-orb:
+    generate-workflow:
       jobs:
-        - <orb-name>/<job-name>
+        - path-filter/filter:
+            mapping: |
+              api build-api true
+              frontend build-frontend true

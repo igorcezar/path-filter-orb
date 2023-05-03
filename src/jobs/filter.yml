@@ -1,0 +1,72 @@
+description: >
+  Continues a pipeline in the `setup` state based with static config
+  and a set of pipeline parameters based on the changes in this push.
+  The mapping should be a set of items like so:
+  <path regular expression> <pipeline parameter> <value>
+  Multiple mappings can be supplied on separate lines.
+  If the regular expression matches any file changed between HEAD and
+  the base revision, the pipeline parameter will be set to the
+  supplied value for the setup workflow continuation. This way the
+  continuation config can be filtered to only perform relevant tasks.
+
+executor:
+  name: default
+  tag: << parameters.tag >>
+
+resource_class: << parameters.resource_class >>
+
+parameters:
+  mapping:
+    type: string
+    default: ""
+    description: >
+      Mapping of path to pipeline parameters and values. 
+      One mapping per line, whitespace-delimited.
+  config-path:
+    type: string
+    default: ".circleci/workflows.yml"
+    description: >
+      The location of the config to continue the pipeline with.
+  circleci_domain:
+    type: string
+    description: "The domain of the CircleCI installation - defaults to circleci.com. (Only necessary for CircleCI Server users)"
+    default: "circleci.com"
+  workspace_path:
+    type: string
+    description: "Path to attach the workspace to"
+    default: ""
+  resource_class:
+    type: string
+    description: "Resource class to use"
+    default: "small"
+  tag:
+    type: string
+    default: "3.10"
+    description: >
+      Pick a specific circleci/python image variant:
+      https://hub.docker.com/r/cimg/python/tags
+
+steps:
+  - checkout
+  - when:
+      condition:
+        not:
+          equal: ["", << parameters.workspace_path >>]
+      steps:
+        - attach_workspace:
+            at: << parameters.workspace_path >>
+  - restore_cache:
+      name: Get last commit from cache
+      keys:
+        - lastCommit-{{ .Branch }}-
+  - check-changes:
+      mapping: << parameters.mapping >>
+  - save_cache:
+      name: Save last commit
+      paths:
+        - lastCommit.json
+      key: lastCommit-{{ .Branch }}-{{ checksum "lastCommit.json" }}
+  - continuation/continue:
+      configuration_path: << parameters.config-path >>
+      circleci_domain: << parameters.circleci_domain >>
+      parameters: parameters.json

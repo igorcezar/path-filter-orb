@@ -1,0 +1,33 @@
+description: >
+  Check changes and generates a set of pipeline parameters from `mapping`.
+parameters:
+  branch:
+    type: string
+    default: << pipeline.git.branch >>
+    description: >
+      Mapping of path regular expressions to pipeline parameters and
+      values. One mapping per line, whitespace-delimited. If duplicate
+      parameter keys are found, the last matching pattern will apply.
+  config-file:
+    type: string
+    default: "workflows.yml"
+    description: >
+      The location of the config to continue the pipeline with.
+  config-source:
+    type: string
+    default: ".circleci/src"
+    description: >
+      The location of the config to continue the pipeline with.
+steps:
+  - run:
+      name: Pack CircleCI config files
+      command: |
+        if  [ << parameters.branch >> != << pipeline.git.branch >> ]; then
+          git checkout << parameters.branch >> << parameters.config-source >>
+        fi
+
+        echo "Packing config..."
+        circleci config pack << parameters.config-source >> > << parameters.config-file >>
+
+        echo "Validating config..."
+        circleci config validate << parameters.config-file >>

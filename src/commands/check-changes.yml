@@ -1,0 +1,17 @@
+description: >
+  Check changes and generates a set of pipeline parameters from `mapping`.
+parameters:
+  mapping:
+    type: string
+    default: ""
+    description: >
+      Mapping of path regular expressions to pipeline parameters and
+      values. One mapping per line, whitespace-delimited. If duplicate
+      parameter keys are found, the last matching pattern will apply.
+steps:
+  - run:
+      name: Check changes
+      environment:
+        MAPPING: << parameters.mapping >>
+      shell: /usr/bin/env python3
+      command: <<include(scripts/filter.py)>>
