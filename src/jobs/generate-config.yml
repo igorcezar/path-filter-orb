@@ -44,7 +44,7 @@ steps:
       config-source: << parameters.config-source >>
       config-output: << parameters.config-output >>
   - when:
-      condition: 
+      condition:
         not: << parameters.continue >>
       steps:
         - persist_to_workspace:

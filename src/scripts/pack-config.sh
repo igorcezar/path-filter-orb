@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if  [ << parameters.branch >> != << pipeline.git.branch >> ]; then
-    git checkout << parameters.branch >> << parameters.config-source >>
+if  [ "$BRANCH" != "$CURRENT_BRANCH" ]; then
+    git checkout "$BRANCH" "$CONFIG_SOURCE"
 fi
 
 echo "Packing config..."
-circleci config pack << parameters.config-source >> > << parameters.config-output >>
+circleci config pack "$CONFIG_SOURCE" > "$CONFIG_OUTPUT"
 
 echo "Validating config..."
-circleci config validate << parameters.config-output >>
+circleci config validate "$CONFIG_OUTPUT"
