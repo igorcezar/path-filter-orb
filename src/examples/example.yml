@@ -8,23 +8,28 @@ usage:
   orbs:
     path-filter: igorcezar/path-filter@0.0.1
   workflows:
-    generate-n-filter-workflow:
+    path-filtering:
+      jobs:
+        - path-filter/filter:
+            config-path: .circleci/workflows.yml
+            mapping: |
+              api build-api true
+              frontend build-frontend true
+    generate-workflow:
       jobs:
         - path-filter/generate-config:
             branch: infra
             config-source: .circleci/src
             config-output: workflows.yml
+            continue: true
+    generate-n-filter-workflow:
+      jobs:
+        - path-filter/generate-config:
+            branch: infra
+            config-source: .circleci/src
         - path-filter/filter:
             mapping: |
               api build-api true
               frontend build-frontend true
-            workspace_path: workspace
-            config-path: workspace/workflows.yml
             requires:
               - path-filter/generate-config
-    path-filtering:
-      jobs:
-        - path-filter/filter:
-            mapping: |
-              api build-api true
-              frontend build-frontend true

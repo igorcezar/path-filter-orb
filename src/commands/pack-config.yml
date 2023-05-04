@@ -1,5 +1,7 @@
 description: >
-  Generates the workflow based on dynamic config.
+  Generates the workflow based on CircleCI FYAML
+  from the same branch or from a different one.
+  https://github.com/CircleCI-Public/fyaml
 parameters:
   branch:
     type: string

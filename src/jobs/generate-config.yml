@@ -1,5 +1,7 @@
 description: >
-  Generates the workflow based on dynamic config.
+  Generates the workflow based on CircleCI FYAML
+  from the same branch or from a different one.
+  https://github.com/CircleCI-Public/fyaml
 
 executor:
   name: circleci-cli
@@ -21,6 +23,8 @@ parameters:
   continue:
     type: boolean
     default: false
+    description: >
+      Continue pipeline with the generated workflow file
   branch:
     type: string
     default: << pipeline.git.branch >>

@@ -5,8 +5,8 @@ parameters:
     type: string
     default: ""
     description: >
-      Mapping of path regular expressions to pipeline parameters and
-      values. One mapping per line, whitespace-delimited. If duplicate
+      Mapping of path to pipeline parameters and values. 
+      One mapping per line, whitespace-delimited. If duplicate
       parameter keys are found, the last matching pattern will apply.
 steps:
   - run:
