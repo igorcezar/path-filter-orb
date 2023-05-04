@@ -34,7 +34,7 @@ parameters:
     type: string
     default: "workflows.yml"
     description: >
-      The name of the generated config file.
+      The name or path of the generated config file.
   config-source:
     type: string
     default: ".circleci/src"

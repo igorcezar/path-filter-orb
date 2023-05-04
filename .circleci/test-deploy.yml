@@ -16,7 +16,7 @@ jobs:
     steps:
       - checkout
       - path-filter/check-changes:
-          mapping: | 
+          mapping: |
             test build-test true
 
 workflows:
