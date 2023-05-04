@@ -1,6 +1,6 @@
 description: >
-  Continue a pipeline after check file changes based on the 
-  last commit stored in the cache for mapped paths. 
+  Continue a pipeline after check file changes based on the
+  last commit stored in the cache for mapped paths.
   If there is no cached commit, it will assume there were file changes.
 usage:
   version: 2.1

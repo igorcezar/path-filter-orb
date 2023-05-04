@@ -20,7 +20,7 @@ parameters:
     type: string
     default: ""
     description: >
-      Mapping of path to pipeline parameters and values. 
+      Mapping of path to pipeline parameters and values.
       One mapping per line, whitespace-delimited.
   config-path:
     type: string
