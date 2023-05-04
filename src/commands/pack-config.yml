@@ -1,0 +1,22 @@
+description: >
+  Generates the workflow based on dynamic config.
+parameters:
+  branch:
+    type: string
+    default: << pipeline.git.branch >>
+    description: >
+      Branch where the config files are stored
+  config-output:
+    type: string
+    default: "workflows.yml"
+    description: >
+      The name of the generated config file.
+  config-source:
+    type: string
+    default: ".circleci/src"
+    description: >
+      The location of the config files to pack.
+steps:
+  - run:
+      name: Pack CircleCI config files
+      command: <<include(scripts/pack-config.sh)>>

@@ -1,0 +1,58 @@
+description: >
+  Generates the workflow based on dynamic config.
+
+executor:
+  name: circleci-cli
+  tag: << parameters.tag >>
+
+resource_class: << parameters.resource_class >>
+
+parameters:
+  resource_class:
+    type: string
+    description: "Resource class to use"
+    default: "small"
+  tag:
+    type: string
+    default: "0.1.26255-alpine"
+    description: >
+      Pick a specific circleci/python image variant:
+      https://hub.docker.com/r/circleci/circleci-cli/tags
+  continue:
+    type: boolean
+    default: false
+  branch:
+    type: string
+    default: << pipeline.git.branch >>
+    description: >
+      Branch where the config files are stored
+  config-output:
+    type: string
+    default: "workflows.yml"
+    description: >
+      The name of the generated config file.
+  config-source:
+    type: string
+    default: ".circleci/src"
+    description: >
+      The location of the config files to pack.
+
+steps:
+  - checkout
+  - pack-config:
+      branch: << parameters.branch >>
+      config-source: << parameters.config-source >>
+      config-output: << parameters.config-output >>
+  - when:
+      condition: 
+        not: << parameters.continue >>
+      steps:
+        - persist_to_workspace:
+            root: .
+            paths:
+              - << parameters.config-output >>
+  - when:
+      condition: << parameters.continue >>
+      steps:
+        - continuation/continue:
+            configuration_path: << parameters.config-output >>
