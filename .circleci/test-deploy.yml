@@ -10,12 +10,12 @@ filters: &filters
 jobs:
   # Create a job to test the commands of your orbs.
   # You may want to add additional validation steps to ensure the commands are working as expected.
-  test-filter:
+  check-changes-test:
     docker:
       - image: cimg/base:current
     steps:
       - checkout
-      - path-filter/filter:
+      - path-filter/check-changes:
           mapping: | 
             test build-test true
 
@@ -23,7 +23,7 @@ workflows:
   test-deploy:
     jobs:
       # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
-      - test-filter:
+      - check-changes-test:
           filters: *filters
       - orb-tools/pack:
           filters: *filters
@@ -33,7 +33,7 @@ workflows:
           pub-type: production
           requires:
             - orb-tools/pack
-            - command-tests
+            - check-changes-test
           context: orb-publishing
           filters:
             branches:
