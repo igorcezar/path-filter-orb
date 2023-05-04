@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if  [ "$BRANCH" != "$CURRENT_BRANCH" ]; then
+if  [ "$BRANCH" != "$CIRCLE_BRANCH" ]; then
     git checkout "$BRANCH" "$CONFIG_SOURCE"
 fi
 

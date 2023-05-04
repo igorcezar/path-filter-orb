@@ -21,7 +21,6 @@ steps:
       name: Pack CircleCI config files
       environment:
         BRANCH: << parameters.branch >>
-        CURRENT_BRANCH: << pipeline.git.branch >>
         CONFIG_OUTPUT: << parameters.config-output >>
         CONFIG_SOURCE: << parameters.config-source >>
       command: <<include(scripts/pack-config.sh)>>
