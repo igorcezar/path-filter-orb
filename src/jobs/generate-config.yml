@@ -27,7 +27,7 @@ parameters:
       Continue pipeline with the generated workflow file
   branch:
     type: string
-    default: << pipeline.git.branch >>
+    default: $CIRCLE_BRANCH
     description: >
       Branch where the config files are stored
   config-output:
