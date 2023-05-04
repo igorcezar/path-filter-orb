@@ -6,7 +6,7 @@ usage:
   version: 2.1
   setup: true
   orbs:
-    path-filtering: igorcezar/path-filter@0.0.1
+    path-filter: igorcezar/path-filter@0.0.1
   workflows:
     generate-workflow:
       jobs:
