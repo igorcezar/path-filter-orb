@@ -60,11 +60,6 @@ steps:
         - lastCommit-{{ .Branch }}-
   - check-changes:
       mapping: << parameters.mapping >>
-  - save_cache:
-      name: Save last commit
-      paths:
-        - lastCommit.json
-      key: lastCommit-{{ .Branch }}-{{ checksum "lastCommit.json" }}
   - when:
       condition: << parameters.generated_config >>
       steps:
@@ -76,12 +71,23 @@ steps:
             parameters: parameters.json
   - when:
       condition:
-        not:
-          equal: ["", << parameters.workspace_path >>]
+        and:
+          - not:
+              equal: ["", << parameters.workspace_path >>]
+          - not: << parameters.generated_config >>
       steps:
         - attach_workspace:
             at: << parameters.workspace_path >>
-  - continuation/continue:
-      configuration_path: << parameters.config-path >>
-      circleci_domain: << parameters.circleci_domain >>
-      parameters: parameters.json
+  - when:
+      condition:
+        not: << parameters.generated_config >>
+      steps:
+        - continuation/continue:
+            configuration_path: << parameters.config-path >>
+            circleci_domain: << parameters.circleci_domain >>
+            parameters: parameters.json
+  - save_cache:
+      name: Save last commit
+      paths:
+        - lastCommit.json
+      key: lastCommit-{{ .Branch }}-{{ checksum "lastCommit.json" }}
