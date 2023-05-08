@@ -27,9 +27,10 @@ parameters:
       Continue pipeline with the generated workflow file
   branch:
     type: string
-    default: $CIRCLE_BRANCH
+    default: ""
     description: >
-      Branch where the config files are stored
+      The branch where the config files are stored.
+      If empty, uses the current branch.
   config-output:
     type: string
     default: "workflows.yml"

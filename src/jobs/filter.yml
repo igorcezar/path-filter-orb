@@ -4,11 +4,11 @@ description: >
   The mapping should be a set of items like so:
   <path> <pipeline parameter> <value>.
   Multiple mappings can be supplied on separate lines.
-  It stores the last commit from each path in the CircleCI cache and
-  compares this cached commit with the current commit in each path.
+  It stores the last commit from each path using the CircleCI cache and
+  compares the cached commit with the current commit of each mapped path.
   If the path last commit differs from the current commit, the pipeline
   parameter will be set to the supplied value for the setup workflow continuation.
-  If there is no cached commit, it will assume the commits differs for the path.
+  If there is no cached commit, it will assume the commit differs for the path.
   This way the continuation config can be filtered to only perform relevant tasks.
 
 executor:
@@ -24,11 +24,22 @@ parameters:
     description: >
       Mapping of path to pipeline parameters and values.
       One mapping per line, whitespace-delimited.
+  extra-params:
+    type: string
+    default: ""
+    description: >
+      Extra parameters to set to the workflow. Overrides parameters from mappings.
+      One parameter per line, with the following pattern:
+      <parameter>: <value>
   config-path:
     type: string
     default: ".circleci/workflows.yml"
     description: >
       The location of the config to continue the pipeline with.
+  generated-config:
+    type: boolean
+    default: false
+    description: "Uses the generated workflow file created by the generate-config job"
   circleci_domain:
     type: string
     description: "The domain of the CircleCI installation - defaults to circleci.com. (Only necessary for CircleCI Server users)"
@@ -41,10 +52,6 @@ parameters:
     type: string
     description: "Resource class to use"
     default: "small"
-  generated_config:
-    type: boolean
-    default: false
-    description: "Uses the generated workflow file created by the generate-config job"
   tag:
     type: string
     default: "3.10"
@@ -61,7 +68,7 @@ steps:
   - check-changes:
       mapping: << parameters.mapping >>
   - when:
-      condition: << parameters.generated_config >>
+      condition: << parameters.generated-config >>
       steps:
         - attach_workspace:
             at: workspace
@@ -74,13 +81,13 @@ steps:
         and:
           - not:
               equal: ["", << parameters.workspace_path >>]
-          - not: << parameters.generated_config >>
+          - not: << parameters.generated-config >>
       steps:
         - attach_workspace:
             at: << parameters.workspace_path >>
   - when:
       condition:
-        not: << parameters.generated_config >>
+        not: << parameters.generated-config >>
       steps:
         - continuation/continue:
             configuration_path: << parameters.config-path >>

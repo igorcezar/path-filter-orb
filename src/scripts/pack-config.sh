@@ -1,6 +1,8 @@
 #!/bin/sh
 
-if  [ "$BRANCH" != "$CIRCLE_BRANCH" ]; then
+# If branch is specified, get files from there
+if  [ "$BRANCH" != "" ]; then
+    echo "Getting files from branch $BRANCH"
     git checkout "$BRANCH" "$CONFIG_SOURCE"
 fi
 
