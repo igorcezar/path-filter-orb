@@ -1,0 +1,29 @@
+description: >
+  Generates the workflow based on CircleCI FYAML
+  from the same branch or a different one.
+  https://github.com/CircleCI-Public/fyaml
+parameters:
+  branch:
+    type: string
+    default: ""
+    description: >
+      The branch where the config files are stored.
+      If empty, uses the current branch.
+  config-output:
+    type: string
+    default: "workflows.yml"
+    description: >
+      The name or path to save the generated config to.
+  config-source:
+    type: string
+    default: ".circleci/src"
+    description: >
+      The location of the config files to pack.
+steps:
+  - run:
+      name: Pack CircleCI config files
+      environment:
+        BRANCH: << parameters.branch >>
+        CONFIG_OUTPUT: << parameters.config-output >>
+        CONFIG_SOURCE: << parameters.config-source >>
+      command: <<include(scripts/pack-config.sh)>>

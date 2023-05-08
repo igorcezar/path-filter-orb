@@ -1,13 +1,38 @@
 description: >
-  Sample example description.
-# Provide a use-case based example for using this orb.
-# Everything in the `usage` section will be displayed in the orb registry.
-# Comments are not retained.
+  Continue a pipeline after check file changes based on the
+  last commit stored in the cache for the mapped paths.
+  If there is no cached commit, it will assume there were file changes.
 usage:
   version: 2.1
+  setup: true
   orbs:
-    <orb-name>: <namespace>/<orb-name>@1.2.3
+    path-filter: igorcezar/path-filter@0.0.1
   workflows:
-    use-my-orb:
+    path-filtering:
       jobs:
-        - <orb-name>/<job-name>
+        - path-filter/filter:
+            config-path: .circleci/workflows.yml
+            mapping: |
+              api build-api true
+              docs/api api-docs true
+            extra-params: |
+              environment: dev
+    generate-workflow:
+      jobs:
+        - path-filter/generate-config:
+            branch: infra
+            config-source: .circleci/src
+            config-output: workflows.yml
+            continue: true
+    generate-n-filter-workflow:
+      jobs:
+        - path-filter/generate-config:
+            branch: infra
+            config-source: .circleci/src
+        - path-filter/filter:
+            mapping: |
+              api build-api true
+              docs/api api-docs true
+            generated-config: true
+            requires:
+              - path-filter/generate-config

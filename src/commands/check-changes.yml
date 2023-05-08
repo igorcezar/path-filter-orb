@@ -1,0 +1,25 @@
+description: >
+  Check changes and generates a set of pipeline parameters from `mapping`.
+parameters:
+  mapping:
+    type: string
+    default: ""
+    description: >
+      Mapping of path to pipeline parameters and values.
+      One mapping per line, whitespace-delimited. If duplicate
+      parameter keys are found, the last matching pattern will apply.
+  extra-params:
+    type: string
+    default: ""
+    description: >
+      Extra parameters to set to the workflow.
+      One parameter per line, with the following pattern:
+      <parameter>: <value>
+steps:
+  - run:
+      name: Check changes
+      environment:
+        MAPPING: << parameters.mapping >>
+        EXTRA_PARAMS: << parameters.extra-params >>
+      shell: /usr/bin/env python3
+      command: <<include(scripts/filter.py)>>
