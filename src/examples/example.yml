@@ -1,6 +1,6 @@
 description: >
   Continue a pipeline after check file changes based on the
-  last commit stored in the cache for mapped paths.
+  last commit stored in the cache for the mapped paths.
   If there is no cached commit, it will assume there were file changes.
 usage:
   version: 2.1
@@ -15,7 +15,7 @@ usage:
             mapping: |
               api build-api true
               docs/api api-docs true
-            extra_params: |
+            extra-params: |
               environment: dev
     generate-workflow:
       jobs:
@@ -30,9 +30,6 @@ usage:
             branch: infra
             config-source: .circleci/src
         - path-filter/filter:
-            extra_params: |
-              env: dev
-              cluster: k8sct
             mapping: |
               api build-api true
               docs/api api-docs true

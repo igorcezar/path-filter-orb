@@ -67,6 +67,7 @@ steps:
         - lastCommit-{{ .Branch }}-
   - check-changes:
       mapping: << parameters.mapping >>
+      extra-params: << parameters.extra-params >>
   - when:
       condition: << parameters.generated-config >>
       steps:
