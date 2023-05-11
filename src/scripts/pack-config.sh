@@ -3,7 +3,7 @@
 # If branch is specified, get files from there
 if  [ "$BRANCH" != "" ]; then
     echo "Getting files from branch $BRANCH"
-    git checkout "$BRANCH" "$CONFIG_SOURCE"
+    git checkout "origin/$BRANCH"
 fi
 
 echo "Packing config..."
